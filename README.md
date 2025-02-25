@@ -1,8 +1,6 @@
 # MonoSandbox
 MonoSandbox is a mod for the virtual reality game Gorilla Tag which introduces a sandbox-based menu inspired by Gary's Mod.
 
-Fixed version by Ngbatz
-
 ## Why use MonoSandbox?
 - A simplistic menu which makes for easy interaction
 - A variety of different items with unique mechanics
