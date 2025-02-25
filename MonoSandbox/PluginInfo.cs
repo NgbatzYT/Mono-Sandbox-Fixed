@@ -3,7 +3,7 @@
     public class PluginInfo
     {
         public const string
-            GUID = "ngbatz.homeoverspend.monosandbox", // HOMEOVERSPEND: anagram of both "dev" and "monosphere"
+            GUID = "homeoverspend.monosandbox", // HOMEOVERSPEND: anagram of both "dev" and "monosphere"
             Name = "MonoSandbox",
             Version = "1.2.2";
     }
