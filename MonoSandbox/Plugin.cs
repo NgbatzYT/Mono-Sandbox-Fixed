@@ -47,6 +47,14 @@ namespace MonoSandbox
         private HammerManager hammerManager;
         private GrenadeManager grenadeManager;
 
+        private void Start()
+        {
+            NetworkSystem.Instance.OnJoinedRoomEvent += OnJoin;
+            NetworkSystem.Instance.OnReturnedToSinglePlayer += OnLeave;
+            GorillaTagger.OnPlayerSpawned(OnGameInitialized);
+        }
+        
+
         public void OnEnable()
         {
             if (_initialized)
@@ -106,13 +114,11 @@ namespace MonoSandbox
             new Harmony(PluginInfo.GUID).PatchAll(typeof(Plugin).Assembly);
         }
 
-        private bool hasInit;
-
         public void OnGameInitialized()
         {
             gameObject.AddComponent<InputHandling>();
 
-            _layerMask = Player.Instance.locomotionEnabledLayers;
+            _layerMask = GTPlayer.Instance.locomotionEnabledLayers;
             _layerMask |= 1 << 8;
 
             _itemsContainer = Instantiate(new GameObject());
@@ -246,6 +252,8 @@ namespace MonoSandbox
         {
             InRoom = true;
 
+            if (!NetworkSystem.Instance.GameModeString.Contains("MODDED")) return;
+
             foreach (Transform child in _itemsContainer.transform)
             {
                 child.gameObject.SetActive(true);
@@ -266,32 +274,7 @@ namespace MonoSandbox
         
         public void Update()
         {
-            if (GorillaLocomotion.Player.Instance != null)
-            {
-                if (!hasInit)
-                {
-                    hasInit = true;
-                    OnGameInitialized();
-                }
-
-                if (PhotonNetwork.InRoom && NetworkSystem.Instance.GameModeString.Contains("MODDED"))
-                {
-                    if(!InRoom)
-                    {
-                        OnJoin();
-                    }
-                }
-
-                if (!PhotonNetwork.InRoom)
-                {
-                    if (InRoom)
-                    {
-                        OnLeave();
-                    }
-                }
-            }
-
-            if (Player.Instance != null) RefCache.HitExists = Physics.Raycast(Player.Instance.rightControllerTransform.position, Player.Instance.rightControllerTransform.forward, out RefCache.Hit, 2000, _layerMask);
+            if (GTPlayer.Instance != null) RefCache.HitExists = Physics.Raycast(GTPlayer.Instance.rightControllerTransform.position, GTPlayer.Instance.rightControllerTransform.forward, out RefCache.Hit, 2000, _layerMask);
 
             #region List
 
